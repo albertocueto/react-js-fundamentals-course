@@ -1,34 +1,72 @@
 import React from 'react'
 
-
 import Profile from './Profile.jsx'
 import AddProfile from './AddProfile.jsx'
 
-export default class App extends React.Component {
-	constructor(props) {
-		super(props)
-		this.state = {
-			profiles: [
-				{
-					name: 'Alberto', 
-					age: 30, 
-					hobbies: ['Rock climbing', 'Videogames'],
-					bio: 'I\'ve come a long way'
-				},
-				{
-					name: 'Cueto', 
-					age: 30, 
-					hobbies: ['Reading', 'Programming'],
-					bio: 'I Enjoy reading and programming'
-				}
-			]
-		}
-		this.addUser = this.addUser.bind(this)
-	}
+import {getProfiles} from '../utils/profileApi.js'
 
-	addUser(newProfile) {
-		console.log(this)
-		/*var user = {
+//Functional stateless practice:
+//Normal:
+/*class MyComponent extends React.Component {
+	render() {
+		<p>{this.props.hello}</p>
+	}
+}*/
+
+//Function stateless component:
+var MyComponent = props => (
+    <div>
+        <p>I am a functional component</p>
+        <p>{props.x}</p>
+    </div>
+)
+
+export default class App extends React.Component {
+    constructor(props) {
+        super(props)
+        this.state = {
+            /*profiles: [
+                {
+                    name: 'Alberto',
+                    age: 30,
+                    hobbies: [
+                        'Rock climbing', 'Videogames'
+                    ],
+                    bio: 'I\'ve come a long way'
+                }, {
+                    name: 'Cueto',
+                    age: 30,
+                    hobbies: [
+                        'Reading', 'Programming'
+                    ],
+                    bio: 'I Enjoy reading and programming'
+                }
+            ]*/
+            profiles: [] //Initialize as an empty array since other components expect the array to exist beforehand
+}
+        this.addUser = this.addUser.bind(this)
+    }
+
+    componentDidMount() {
+        //We moved this logic to its own file because that makes the logic reusable and it's better for unit testing:
+        /*
+        fetch('http://localhost:3000/profiles.json')
+            .then(res => res.json())
+            .then(data => {
+                console.log(data)
+                this.setState({profiles: data})
+            })
+            .catch(err => {
+                console.log(err)
+            })*/
+        getProfiles().then(profiles => {
+            this.setState({profiles: profiles})
+        })
+    }
+
+    addUser(newProfile) {
+        console.log(this)
+        /*var user = {
 			name: 'José',
                         age: 30,
                         hobbies: ['Rock climbing', 'Videogames', 'Reading', 'Programming'],
@@ -37,28 +75,21 @@ export default class App extends React.Component {
 		this.setState({
 			profiles: this.state.profiles.concat([user])
 		})*/
-		this.setState({
-			profiles: this.state.profiles.concat([newProfile])
-		})
-	}
+        this.setState({
+            profiles: this.state.profiles.concat([newProfile])
+        })
+    }
 
-	render() {
-		let profiles = this.state.profiles.map(profile => {
-			return (
-	                        <Profile
-                	                name={profile.name}
-                        	        age={profile.age}
-                                	bio={profile.bio}
-	                                hobbies={profile.hobbies}
-        	                 />
-	
-			)
-		})
-		return (
-			<div>
-				<AddProfile addUser={this.addUser} />
-				{profiles}
-			</div>
-		)
-	}
+    render() {
+        console.log('app rendered')
+        let profiles = this.state.profiles.map(profile => {
+            return (<Profile name={profile.name} age={profile.age} bio={profile.bio} hobbies={profile.hobbies}/>)
+        })
+        return (
+            <div>
+                <MyComponent x="X Message"/>
+                <AddProfile addUser={this.addUser}/> {profiles}
+            </div>
+        )
+    }
 }

@@ -20,6 +20,7 @@
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject",
-    "dev": "webpack-dev-server"
+    "dev": "webpack-dev-server",
+    "profiles-server": "serve -C app/profiles"
   }
 }
