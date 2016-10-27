@@ -1,0 +1,11 @@
+[{
+    "name": "Alberto",
+    "age": 30,
+    "hobbies": ["Rock climbing", "Videogames"],
+    "bio": "I've come a long way"
+}, {
+    "name": "Cueto",
+    "age": 30,
+    "hobbies": ["Reading", "Programming"],
+    "bio": "I Enjoy reading and programming"
+}]
